@@ -21,4 +21,3 @@ def debug_failure_handler(request_type, name, response_time, exception, context,
     """ additional request failure handler to log statistics """
     if exception is not None:
         print(ERR_TEMPLATE % (request_type, name, "ERR", response_time, exception, json.dumps(kwargs)))
-

@@ -43,4 +43,3 @@ class KafkaClient:
     def send(self, topic, key=None, message=None):
         self.producer.produce(topic=topic, key=key, value=message, callback=KafkaClient.delivery_callback)
         self.producer.flush()
-
