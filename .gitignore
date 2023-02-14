@@ -2,4 +2,7 @@ src/config/cloud.ini
 data
 .idea
 
+kafka/
+zookeeper/
+
 __pycache__
