@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: master
+  namespace: locust
+  labels:
+    app: master
+spec:
+  selector:
+    app: master
+  type: LoadBalancer
+  ports:
+  - port: 8089
+    targetPort: 8089
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: master
+  namespace: locust
+  labels:
+    app: master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: master
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: master
+    spec:
+      containers:
+      - name: master
+        image: bucket98/locust:0.8
+        command: ["locust", "-f", "locustfile.py", "--master", "-H", "http://master:8089"]
+        ports:
+        - containerPort: 8089
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "50m"
