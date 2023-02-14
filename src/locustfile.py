@@ -16,7 +16,7 @@ class KafkaLocust(User):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.user_id = None
-        KafkaLocust.client = KafkaClient(config_path="config/local.ini")
+        KafkaLocust.client = KafkaClient(config_path="config/cloud.ini")
 
     def on_start(self):
         self.user_id = str(uuid.uuid4())
