@@ -15,6 +15,23 @@ spec:
 
 ---
 
+apiVersion: v1
+kind: Service
+metadata:
+  name: master-internal
+  namespace: locust
+  labels:
+    app: master
+spec:
+  selector:
+    app: master
+  type: ClusterIP
+  ports:
+  - port: 5557
+    targetPort: 5557
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -36,11 +53,8 @@ spec:
     spec:
       containers:
       - name: master
-        image: bucket98/locust:0.8
+        image: bucket98/locust:0.9
         command: ["locust", "-f", "locustfile.py", "--master", "-H", "http://master:8089"]
         ports:
         - containerPort: 8089
-        resources:
-          limits:
-            memory: "64Mi"
-            cpu: "50m"
+        - containerPort: 5557
