@@ -7,10 +7,8 @@ RUN apt install -y git gcc g++ make libssl-dev \
     && git clone https://github.com/edenhill/librdkafka.git \
     && cd /librdkafka && ./configure --prefix /usr \
     && make && make install \
-    && pip install -r /requirements.txt
-RUN mkdir /src
+    && pip install -r /requirements.txt \
 
-ADD src /src
 WORKDIR /src
 
 ENTRYPOINT ["locust"]

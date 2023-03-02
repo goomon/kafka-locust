@@ -1,22 +1,18 @@
-import json
 import time
 import uuid
 
-from locust import task, User
+from locust import task, HttpUser
 
-from config.constants import MAIN_TOPIC
-from kafka_client import KafkaClient
 from mock_generator import MockSensorDataGenerator
 
 
-class KafkaLocust(User):
+class SpringLocust(HttpUser):
     mock_generator = MockSensorDataGenerator
     client = None
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.user_id = None
-        KafkaLocust.client = KafkaClient(config_path="config/local.ini")
 
     def on_start(self):
         self.user_id = str(uuid.uuid4())
@@ -24,6 +20,6 @@ class KafkaLocust(User):
 
     @task
     def send_data(self):
-        msg = KafkaLocust.mock_generator.generate_data(self.user_id)
-        self.client.send(MAIN_TOPIC, key=self.user_id, message=json.dumps(msg))
-        time.sleep(0.5)
+        msg = SpringLocust.mock_generator.generate_data(self.user_id)
+        self.client.post("/", json=msg)
+        time.sleep(0.7)

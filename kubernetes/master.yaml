@@ -53,8 +53,8 @@ spec:
     spec:
       containers:
       - name: master
-        image: bucket98/locust:0.9
-        command: ["locust", "-f", "locustfile.py", "--master", "-H", "http://master:8089"]
+        image: bucket98/locust:cluster-1.1
+        command: ["locust", "-f", "locustfile.py", "--master", "-H", "http://backend:8080"]
         ports:
         - containerPort: 8089
         - containerPort: 5557
