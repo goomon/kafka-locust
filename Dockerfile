@@ -4,10 +4,9 @@ COPY requirements.txt /
 
 RUN apt update
 RUN apt install -y git gcc g++ make libssl-dev \
-    && git clone https://github.com/edenhill/librdkafka.git \
-    && cd /librdkafka && ./configure --prefix /usr \
-    && make && make install \
-    && pip install -r /requirements.txt \
+    && pip install -r /requirements.txt
+
+ADD src /src
 
 WORKDIR /src
 
