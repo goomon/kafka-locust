@@ -1,9 +1,9 @@
+import os
+
 # Sampling rate of each data(Hz)
-ACC_HZ = 32
-BVP_HZ = 64
-EDA_HZ = 4
-HR_HZ = 1
-TEMP_HZ = 4
+SAMPLING_RATE = 700
+WINDOW_SIZE = 2 if os.getenv("WINDOW_SIZE") is None else int(os.getenv("WINDOW_SIZE"))
+OVERLAP_RATIO = 0.5 if os.getenv("OVERLAP_RATIO") is None else float(os.getenv("OVERLAP_RATIO"))
 
 # Topic
 MAIN_TOPIC = "data"

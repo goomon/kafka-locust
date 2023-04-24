@@ -7,7 +7,6 @@ from mock_generator import MockSensorDataGenerator
 
 
 class SpringLocust(HttpUser):
-    mock_generator = MockSensorDataGenerator
     client = None
 
     def __init__(self, *args, **kwargs):
@@ -20,6 +19,7 @@ class SpringLocust(HttpUser):
 
     @task
     def send_data(self):
-        msg = SpringLocust.mock_generator.generate_data(self.user_id)
-        self.client.post("/", json=msg)
-        time.sleep(0.7)
+        msg = MockSensorDataGenerator.generate_data(self.user_id)
+        if msg is not None:
+            self.client.post("/", json=msg)
+        time.sleep(1)

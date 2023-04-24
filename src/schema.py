@@ -2,63 +2,29 @@
 #   "user_id": 1,
 #   "timestamp": 12312412312,
 #   "value": {
-#     "acc": {
-#       "hz": 32,
-#       "value": [
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1},
-#         {"x": 0.1, "y": 0.1, "z": 0.1}
-#       ]
+#     "chest_acc": {
+#       "hz": 700,
+#       "value": []
 #     },
-#     "bvp": {
-#       "hz": 64,
-#       "value": [
-#         0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1,
-#         0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1,
-#         0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1,
-#         0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1,
-#         0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1,
-#         0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1,
-#         0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1,
-#         0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1
-#       ]
+#     "chest_ecg": {
+#       "hz": 700,
+#       "value": []
 #     },
-#     "eda": {
-#       "hz": 4,
-#       "value": [0.1, 0.1, 0.1, 0.1]
+#     "chest_eda": {
+#       "hz": 700,
+#       "value": []
 #     },
-#     "hr": {
-#       "hz": 1,
-#       "value": [0.1]
+#     "chest_emg": {
+#       "hz": 700,
+#       "value": []
+#     },
+#     "chest_temp": {
+#       "hz": 700,
+#       "value": []
+#     },
+#     "chest_resp": {
+#       "hz": 700,
+#       "value": []
 #     }
 #   }
 # }
@@ -67,45 +33,58 @@ from typing import TypedDict, List
 
 
 class Axis(TypedDict):
-    x: float
-    y: float
-    z: float
+    x: int
+    y: int
+    z: int
 
 
-class Accelerometer(TypedDict):
+# Chest Accelerometer
+class ChestACC(TypedDict):
     hz: int
     value: List[Axis]
 
 
-class BloodVolumePulse(TypedDict):
+# Chest Electrocardiogram
+class ChestEGC(TypedDict):
     hz: int
-    value: List[float]
+    value: List[int]
 
 
-class Electrodemal(TypedDict):
+# Chest Electrodemal
+class ChestEDA(TypedDict):
     hz: int
-    value: List[float]
+    value: List[int]
 
 
-class HeartRate(TypedDict):
+# Chest Electromyogram
+class ChestEMG(TypedDict):
     hz: int
-    value: List[float]
+    value: List[int]
 
 
-class Temperature(TypedDict):
+# Chest Temperature
+class ChestTemp(TypedDict):
     hz: int
-    value: List[float]
+    value: List[int]
 
 
-class SensorValue(TypedDict):
-    acc: Accelerometer
-    bvp: BloodVolumePulse
-    eda: Electrodemal
-    hr: HeartRate
-    temp: Temperature
+# Chest Respiration
+class ChestResp(TypedDict):
+    hz: int
+    value: List[int]
 
 
-class SensorRecord(TypedDict):
+class ChestDeviceSensorValue(TypedDict):
+    chest_acc: ChestACC
+    chest_ecg: ChestEGC
+    chest_eda: ChestEDA
+    chest_emg: ChestEMG
+    chest_temp: ChestTemp
+    chest_resp: ChestResp
+
+
+class ChestDeviceSensorRecord(TypedDict):
     user_id: str
     timestamp: int
-    value: SensorValue
+    window_size: int
+    value: List[ChestDeviceSensorValue]
