@@ -1,5 +1,5 @@
 import time
-from collections import defaultdict
+import uuid
 from typing import List, Generator, Optional
 
 from schema import ChestDeviceSensorRecord, Axis, \
@@ -21,19 +21,17 @@ def calc_sample_rate() -> int:
 
 
 class MockSensorDataGenerator:
-    sampling_rate: int = calc_sample_rate()
-    counter: dict[str, int] = defaultdict(lambda: 0)
-    timestamp_map: dict[str, float] = defaultdict(time.time)
-    file_reader: Generator[str, None, None] = read_lines(None)
-    record_queue: List[ChestDeviceSensorValue] = []
 
-    @staticmethod
-    def generate_data(user_id: str) -> Optional[ChestDeviceSensorRecord]:
-        MockSensorDataGenerator.timestamp_map[user_id] += 1
-        MockSensorDataGenerator.counter[user_id] += 1
+    def __init__(self, user_id):
+        self.user_id = user_id
+        self.sampling_rate: int = calc_sample_rate()
+        self.counter: int = 0
+        self.file_reader: Generator[str, None, None] = read_lines(None)
+        self.record_queue: List[ChestDeviceSensorValue] = []
+
+    def generate_data(self) -> Optional[ChestDeviceSensorRecord]:
         # Data generating function is called every one second.
-        timestamp = MockSensorDataGenerator.timestamp_map[user_id]
-        counter = MockSensorDataGenerator.counter[user_id]
+        self.counter += 1
 
         chest_acc: List[Axis] = []
         chest_ecg: List[int] = []
@@ -42,10 +40,10 @@ class MockSensorDataGenerator:
         chest_temp: List[int] = []
         chest_resp: List[int] = []
         cnt = 0
-        for line in MockSensorDataGenerator.file_reader:
+        for line in self.file_reader:
             line = line.split("\t")
             # Sampling rate of Respiban dataset is 700Hz.
-            if cnt > 700:
+            if cnt > SAMPLING_RATE:
                 break
             cnt += 1
             # Insert sensor data from target file.
@@ -86,17 +84,18 @@ class MockSensorDataGenerator:
                 "value": chest_resp
             }
         }
-        MockSensorDataGenerator.record_queue.append(template)
+        self.record_queue.append(template)
         # If record_queue size is greater than window size, pop it.
-        if len(MockSensorDataGenerator.record_queue) > WINDOW_SIZE:
-            MockSensorDataGenerator.record_queue = MockSensorDataGenerator.record_queue[1:]
+        if len(self.record_queue) > WINDOW_SIZE:
+            self.record_queue = self.record_queue[1:]
 
-        if len(MockSensorDataGenerator.record_queue) == WINDOW_SIZE and counter % MockSensorDataGenerator.sampling_rate == 0:
+        if len(self.record_queue) == WINDOW_SIZE and self.counter % self.sampling_rate == 0:
             return {
-                "user_id": user_id,
-                "timestamp": timestamp,
+                "user_id": self.user_id,
+                "connection_id": str(uuid.uuid4()),
+                "timestamp": int(time.time() * 1000),
                 "window_size": WINDOW_SIZE,
-                "value": MockSensorDataGenerator.record_queue
+                "value": self.record_queue
             }
         else:
             return None
