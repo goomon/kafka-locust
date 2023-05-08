@@ -5,7 +5,8 @@ from locust import task, HttpUser, events
 from sqlalchemy.orm import Session
 
 from mock_generator import MockSensorDataGenerator
-from db.models import Base, StartRecord
+from db import models
+from db.models import Base
 from db.database import engine, get_db
 
 session: Session = None
@@ -45,9 +46,10 @@ class SpringLocust(HttpUser):
         msg = self.generator.generate_data()
         if msg is not None:
             self.client.post("/", json=msg)
-            data = StartRecord(
+            data = models.StartRecord(
                 connection_id=msg["connection_id"],
                 timestamp=msg["timestamp"],
+                response_time=int(time.time()*1000)
             )
             session.add(data)
         time.sleep(1)

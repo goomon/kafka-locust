@@ -20,6 +20,10 @@ class StartRecord(Base):
         BigInteger,
         nullable=False,
     )
+    response_time = Column(
+        BigInteger,
+        nullable=False,
+    )
 
     def __repr__(self) -> str:
         return f"StartRecord(id={self.id}, start_time={self.consume_time})"
