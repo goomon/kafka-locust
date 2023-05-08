@@ -30,3 +30,5 @@ wheel==0.38.4
 zipp==3.13.0
 zope.event==4.6
 zope.interface==5.5.2
+
+SQLAlchemy~=2.0.12
