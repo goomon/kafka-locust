@@ -75,17 +75,12 @@ class ChestResp(TypedDict):
 
 
 class ChestDeviceSensorValue(TypedDict):
+    user_id: str
+    connection_id: str
+    timestamp: int
     chest_acc: ChestACC
     chest_ecg: ChestEGC
     chest_eda: ChestEDA
     chest_emg: ChestEMG
     chest_temp: ChestTemp
     chest_resp: ChestResp
-
-
-class ChestDeviceSensorRecord(TypedDict):
-    user_id: str
-    connection_id: str
-    timestamp: int
-    window_size: int
-    value: List[ChestDeviceSensorValue]

@@ -27,9 +27,8 @@ class MockSensorDataGenerator:
         self.sampling_rate: int = calc_sample_rate()
         self.counter: int = 0
         self.file_reader: Generator[str, None, None] = read_lines(None)
-        self.record_queue: List[ChestDeviceSensorValue] = []
 
-    def generate_data(self) -> Optional[ChestDeviceSensorRecord]:
+    def generate_data(self) -> ChestDeviceSensorValue:
         # Data generating function is called every one second.
         self.counter += 1
 
@@ -59,6 +58,9 @@ class MockSensorDataGenerator:
             chest_resp.append(int(line[7]))
 
         template: ChestDeviceSensorValue = {
+            "user_id": self.user_id,
+            "connection_id": str(uuid.uuid4()),
+            "timestamp": int(time.time() * 1000),
             "chest_acc": {
                 "hz": SAMPLING_RATE,
                 "value": chest_acc
@@ -84,18 +86,5 @@ class MockSensorDataGenerator:
                 "value": chest_resp
             }
         }
-        self.record_queue.append(template)
-        # If record_queue size is greater than window size, pop it.
-        if len(self.record_queue) > WINDOW_SIZE:
-            self.record_queue = self.record_queue[1:]
 
-        if len(self.record_queue) == WINDOW_SIZE and self.counter % self.sampling_rate == 0:
-            return {
-                "user_id": self.user_id,
-                "connection_id": str(uuid.uuid4()),
-                "timestamp": int(time.time() * 1000),
-                "window_size": WINDOW_SIZE,
-                "value": self.record_queue
-            }
-        else:
-            return None
+        return template
