@@ -1,9 +1,8 @@
 import time
 import uuid
-from typing import List, Generator, Optional
+from typing import List, Generator
 
-from schema import ChestDeviceSensorRecord, Axis, \
-    ChestDeviceSensorValue
+from schema import Axis, ChestDeviceSensorValue
 from config.constants import *
 
 
